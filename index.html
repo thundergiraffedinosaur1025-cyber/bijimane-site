@@ -68,6 +68,9 @@
   }
   @media (max-width:560px){ .card-deck{grid-template-columns:1fr;} }
 
+  .weak-card{margin-top:16px;}
+  .weak-card .icon{background:var(--gold); color:var(--navy-deep);}
+
   .official-link{
     display:block; margin-top:16px; text-align:center;
     background:var(--navy); border:none; border-radius:10px;
@@ -293,6 +296,11 @@
         <p>講義動画①〜③を、スマホでもPCでも視聴できます。</p>
       </div>
     </div>
+    <div id="weakCard" class="choice-card weak-card hidden" onclick="goWeakQuiz()">
+      <div class="icon">★</div>
+      <h3>苦手問題を復習</h3>
+      <p id="weakCount"></p>
+    </div>
     <a class="official-link" href="https://kentei.tokyo-cci.or.jp/bijimane/" target="_blank" rel="noopener">公式サイト（申込）へ</a>
   </div>
 
@@ -325,7 +333,7 @@
       </div>
       <div class="score-line"><b id="scoreRate">0点</b>　/ 100点満点　（<span id="scoreFraction">0/10</span>問正解）</div>
       <div class="result-actions">
-        <button class="restart-btn" onclick="goQuiz()">もう一度挑戦する</button>
+        <button class="restart-btn" onclick="restartQuiz()">もう一度挑戦する</button>
         <button class="home-btn" onclick="goHome()">トップに戻る</button>
       </div>
     </div>
@@ -363,6 +371,31 @@ let quizOrder = [];
 let currentIndex = 0;
 let correctCount = 0;
 let answered = false;
+let quizMode = 'random';
+
+const WEAK_KEY = 'bijimane_weak_ids';
+
+function getWeakIds(){
+  try{ return JSON.parse(localStorage.getItem(WEAK_KEY) || '[]'); }catch(e){ return []; }
+}
+
+function markWeak(qid, isCorrect){
+  const ids = getWeakIds();
+  const idx = ids.indexOf(qid);
+  if(isCorrect){
+    if(idx !== -1) ids.splice(idx, 1);
+  } else if(idx === -1){
+    ids.push(qid);
+  }
+  localStorage.setItem(WEAK_KEY, JSON.stringify(ids));
+}
+
+function updateWeakCard(){
+  const ids = getWeakIds();
+  const card = document.getElementById('weakCard');
+  card.classList.toggle('hidden', ids.length === 0);
+  document.getElementById('weakCount').textContent = '苦手な問題だけを解き直せます（現在 ' + ids.length + '問）';
+}
 
 function shuffle(arr){
   const a = arr.slice();
@@ -377,6 +410,7 @@ function showScreen(id){
   ['screen-gate','screen-home','screen-quiz','screen-result','screen-video'].forEach(s=>{
     document.getElementById(s).classList.toggle('hidden', s!==id);
   });
+  if(id === 'screen-home') updateWeakCard();
 }
 
 function goHome(){ showScreen('screen-home'); }
@@ -422,11 +456,27 @@ function initGate(){
 initGate();
 
 function goQuiz(){
+  quizMode = 'random';
   quizOrder = shuffle(QUESTIONS).slice(0, 10);
   currentIndex = 0;
   correctCount = 0;
   showScreen('screen-quiz');
   renderQuestion();
+}
+
+function goWeakQuiz(){
+  const ids = getWeakIds();
+  if(ids.length === 0){ showScreen('screen-home'); return; }
+  quizMode = 'weak';
+  quizOrder = shuffle(QUESTIONS.filter(q => ids.includes(q.id)));
+  currentIndex = 0;
+  correctCount = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function restartQuiz(){
+  if(quizMode === 'weak') goWeakQuiz(); else goQuiz();
 }
 
 function renderQuestion(){
@@ -473,6 +523,7 @@ function selectMc(idx, q){
   answered = true;
   const isCorrect = idx === q.correct;
   if(isCorrect) correctCount++;
+  markWeak(q.id, isCorrect);
   const buttons = document.querySelectorAll('#mcChoices .choice-btn');
   buttons.forEach((b,i)=>{
     b.disabled = true;
@@ -487,6 +538,7 @@ function selectTf(val, q){
   answered = true;
   const isCorrect = val === q.correct;
   if(isCorrect) correctCount++;
+  markWeak(q.id, isCorrect);
   const buttons = document.querySelectorAll('#tfChoices .tf-btn');
   buttons.forEach((b)=>{
     b.disabled = true;
