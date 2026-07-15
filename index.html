@@ -241,8 +241,9 @@
   .gate-lead{font-size:14px;color:var(--ink-soft);margin:0 0 22px;}
   .gate-lead b{color:var(--navy);}
   .animal-grid{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:10px;
   }
+  @media (max-width:480px){ .animal-grid{grid-template-columns:repeat(3, 1fr);} }
   @media (max-width:480px){ .animal-btn{padding:12px 4px;font-size:12.5px;} }
   .animal-btn{
     padding:14px 6px; border-radius:10px; border:1.5px solid var(--line);
@@ -418,7 +419,7 @@ function goVideo(){ showScreen('screen-video'); }
 const GATE_KEY = 'bijimane_gate_passed';
 const GATE_ANSWER = 'もぐら';
 const ANIMALS = ['もぐら','ねこ','いぬ','うさぎ','ぞう','きりん','ぱんだ','とら','らいおん','さる','くま','しか','きつね','たぬき','ひつじ','うし','うま','ぶた','りす','かめ'];
-const GATE_CHOICE_COUNT = 6;
+const GATE_CHOICE_COUNT = 12;
 
 function renderGate(){
   const wrap = document.getElementById('gateChoices');
