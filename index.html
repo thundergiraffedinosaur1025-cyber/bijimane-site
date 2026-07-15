@@ -74,8 +74,8 @@
   .official-link{
     display:block; margin-top:16px; text-align:center;
     background:var(--navy); border:none; border-radius:10px;
-    padding:17px 20px; font-size:15.5px; font-weight:700; color:#fff;
-    text-decoration:none; font-family:inherit;
+    padding:24px 20px; font-size:19px; font-weight:700; color:#fff;
+    text-decoration:none; font-family:"Zen Old Mincho", serif;
   }
   .official-link:hover{background:var(--navy-deep);}
 
@@ -101,6 +101,13 @@
     margin:0 0 8px; font-size:19px; color:var(--navy);
   }
   .choice-card p{margin:0; font-size:13.5px; color:var(--ink-soft);}
+  .card-badges{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 10px;}
+  .card-badge{
+    display:inline-block; font-size:11px; letter-spacing:.04em; font-weight:700;
+    background:var(--navy); color:var(--gold-soft);
+    padding:3px 10px; border-radius:999px;
+  }
+  .weak-card .card-badge{ background:var(--gold); color:var(--navy-deep); }
 
   .section{margin-top:34px;}
   .back-link{
@@ -288,18 +295,30 @@
       <div class="choice-card" onclick="goQuiz()">
         <div class="icon">Q</div>
         <h3>チャレンジ問題</h3>
+        <div class="card-badges">
+          <span class="card-badge">4択</span>
+          <span class="card-badge">○×</span>
+          <span class="card-badge">全100問</span>
+        </div>
         <p>4択・○×形式で100問。ランダム出題、その場で解説つき。</p>
       </div>
       <div class="choice-card" onclick="goVideo()">
         <div class="icon">▶</div>
         <h3>動画コーナー</h3>
+        <div class="card-badges">
+          <span class="card-badge">動画3本</span>
+          <span class="card-badge">スマホ/PC対応</span>
+        </div>
         <p>講義動画①〜③を、スマホでもPCでも視聴できます。</p>
       </div>
     </div>
     <div id="weakCard" class="choice-card weak-card hidden" onclick="goWeakQuiz()">
       <div class="icon">★</div>
       <h3>苦手問題を復習</h3>
-      <p id="weakCount"></p>
+      <div class="card-badges">
+        <span class="card-badge" id="weakBadge">現在 0問</span>
+      </div>
+      <p>苦手な問題だけを解き直せます。</p>
     </div>
     <a class="official-link" href="https://kentei.tokyo-cci.or.jp/bijimane/" target="_blank" rel="noopener">公式サイト（申込）へ</a>
   </div>
@@ -394,7 +413,7 @@ function updateWeakCard(){
   const ids = getWeakIds();
   const card = document.getElementById('weakCard');
   card.classList.toggle('hidden', ids.length === 0);
-  document.getElementById('weakCount').textContent = '苦手な問題だけを解き直せます（現在 ' + ids.length + '問）';
+  document.getElementById('weakBadge').textContent = '現在 ' + ids.length + '問';
 }
 
 function shuffle(arr){
