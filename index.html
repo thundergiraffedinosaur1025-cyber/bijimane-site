@@ -195,6 +195,9 @@
   .score-line{font-size:15px;color:var(--ink-soft);margin:6px 0 26px;}
   .score-line b{color:var(--navy);font-size:20px;}
 
+  .result-actions{
+    display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:4px;
+  }
   .restart-btn{
     background:var(--gold); color:#2A2109; border:none; border-radius:10px;
     padding:13px 26px; font-size:14.5px; font-weight:700; cursor:pointer;
@@ -202,10 +205,11 @@
   }
   .restart-btn:hover{filter:brightness(0.95);}
   .home-btn{
-    background:none;border:none;color:var(--ink-soft);
-    font-size:13.5px;cursor:pointer;margin-top:14px;font-family:inherit;
-    text-decoration:underline;
+    background:#fff; color:var(--navy); border:1.5px solid var(--navy); border-radius:10px;
+    padding:13px 26px; font-size:14.5px; font-weight:700; cursor:pointer;
+    font-family:inherit;
   }
+  .home-btn:hover{background:var(--navy); color:#fff;}
 
   /* video corner */
   .video-item{
@@ -311,8 +315,10 @@
         <div class="seal-sub">CHALLENGE</div>
       </div>
       <div class="score-line"><b id="scoreRate">0点</b>　/ 100点満点　（<span id="scoreFraction">0/10</span>問正解）</div>
-      <button class="restart-btn" onclick="goQuiz()">もう一度挑戦する</button><br>
-      <button class="home-btn" onclick="goHome()">トップに戻る</button>
+      <div class="result-actions">
+        <button class="restart-btn" onclick="goQuiz()">もう一度挑戦する</button>
+        <button class="home-btn" onclick="goHome()">トップに戻る</button>
+      </div>
     </div>
   </div>
 
