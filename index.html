@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ビジネスマネジャー検定 対策サイト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #1B2A4C;
+    --navy-deep: #10192F;
+    --gold: #C99A3D;
+    --gold-soft: #E7CE9C;
+    --paper: #FAFAF9;
+    --ink: #202430;
+    --ink-soft: #5B6070;
+    --line: #E3E1DC;
+    --ok: #2E7D5B;
+    --ok-bg: #E9F5EE;
+    --ng: #B3402C;
+    --ng-bg: #FBEBE7;
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{max-width:720px;margin:0 auto;padding:0 20px 60px;}
+  header.top{
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color:#fff;
+    padding:44px 24px 40px;
+    margin-bottom:-24px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute; right:-60px; top:-60px;
+    width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle, rgba(201,154,61,0.35) 0%, rgba(201,154,61,0) 70%);
+  }
+  header.top .eyebrow{
+    font-size:12.5px; letter-spacing:.16em; color:var(--gold-soft);
+    text-transform:uppercase; margin:0 0 10px;
+  }
+  header.top h1{
+    font-family:"Zen Old Mincho", serif;
+    font-weight:700;
+    font-size:clamp(24px, 5vw, 32px);
+    margin:0;
+    letter-spacing:.02em;
+  }
+  header.top p.sub{
+    margin:12px 0 0; color:rgba(255,255,255,0.75); font-size:14.5px;
+  }
+
+  .card-deck{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    margin-top:36px;
+  }
+  @media (max-width:560px){ .card-deck{grid-template-columns:1fr;} }
+
+  .choice-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 20px;
+    text-align:left;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    box-shadow:0 1px 2px rgba(20,20,30,0.03);
+  }
+  .choice-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(27,42,76,0.12); border-color:var(--gold); }
+  .choice-card .icon{
+    width:44px;height:44px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--navy); color:var(--gold-soft);
+    font-size:20px; margin-bottom:14px;
+  }
+  .choice-card h3{
+    font-family:"Zen Old Mincho", serif;
+    margin:0 0 8px; font-size:19px; color:var(--navy);
+  }
+  .choice-card p{margin:0; font-size:13.5px; color:var(--ink-soft);}
+
+  .section{margin-top:34px;}
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none;border:none;color:var(--ink-soft);
+    font-size:13.5px;cursor:pointer;padding:6px 0;margin-bottom:8px;
+    font-family:inherit;
+  }
+  .back-link:hover{color:var(--navy);}
+
+  /* progress */
+  .progress-wrap{margin:22px 0 18px;}
+  .progress-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg, var(--gold), var(--navy));transition:width .3s ease;}
+  .progress-label{font-size:12.5px;color:var(--ink-soft);margin-top:8px;display:flex;justify-content:space-between;}
+
+  .qcard{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 22px;box-shadow:0 1px 2px rgba(20,20,30,0.03);
+  }
+  .qtype-tag{
+    display:inline-block;font-size:11.5px;letter-spacing:.06em;
+    background:var(--navy);color:var(--gold-soft);
+    padding:3px 10px;border-radius:999px;margin-bottom:14px;
+  }
+  .qtext{font-size:17px;font-weight:700;color:var(--ink);margin:0 0 20px;line-height:1.65;}
+
+  .choices-list{display:flex;flex-direction:column;gap:10px;}
+  .choice-btn{
+    text-align:left;
+    border:1.5px solid var(--line);
+    background:#fff;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--ink);
+    cursor:pointer;
+    display:flex; gap:10px; align-items:flex-start;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .choice-btn:hover:not(:disabled){border-color:var(--navy);}
+  .choice-btn .num{
+    flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+    background:var(--line);color:var(--ink-soft);
+    font-size:12px;display:flex;align-items:center;justify-content:center;
+  }
+  .choice-btn:disabled{cursor:default;}
+  .choice-btn.correct{ border-color:var(--ok); background:var(--ok-bg); }
+  .choice-btn.correct .num{background:var(--ok);color:#fff;}
+  .choice-btn.wrong{ border-color:var(--ng); background:var(--ng-bg); }
+  .choice-btn.wrong .num{background:var(--ng);color:#fff;}
+
+  .tf-row{display:flex;gap:14px;}
+  .tf-btn{
+    flex:1;padding:22px 10px;border-radius:12px;border:1.5px solid var(--line);
+    background:#fff;font-size:26px;font-weight:700;cursor:pointer;
+    font-family:"Zen Old Mincho", serif; color:var(--navy);
+  }
+  .tf-btn:hover:not(:disabled){border-color:var(--navy);}
+  .tf-btn.correct{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);}
+  .tf-btn.wrong{border-color:var(--ng);background:var(--ng-bg);color:var(--ng);}
+  .tf-btn:disabled{cursor:default;}
+
+  .feedback{
+    margin-top:18px; padding:16px 18px; border-radius:10px;
+    background:#F4F2EC; font-size:14px; color:var(--ink);
+    display:none;
+  }
+  .feedback.show{display:block; animation:slideIn .25s ease;}
+  .feedback .fb-head{font-weight:700;margin-bottom:6px;}
+  .feedback.is-correct .fb-head{color:var(--ok);}
+  .feedback.is-wrong .fb-head{color:var(--ng);}
+  @keyframes slideIn{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+
+  .next-btn{
+    margin-top:20px; width:100%; padding:14px;
+    background:var(--navy); color:#fff; border:none; border-radius:10px;
+    font-size:15px; font-weight:700; cursor:pointer; font-family:inherit;
+    display:none;
+  }
+  .next-btn.show{display:block;}
+  .next-btn:hover{background:var(--navy-deep);}
+
+  /* result */
+  .result-wrap{text-align:center;padding:30px 10px 10px;}
+  .seal{
+    width:150px;height:150px;margin:0 auto 22px;border-radius:50%;
+    border:5px solid var(--ng);color:var(--ng);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transform:rotate(-8deg);
+    font-family:"Zen Old Mincho", serif;
+    position:relative;
+  }
+  .seal::before{
+    content:"";position:absolute;inset:8px;border:1.5px solid var(--ng);border-radius:50%;
+  }
+  .seal.pass{border-color:var(--ok);color:var(--ok);}
+  .seal.pass::before{border-color:var(--ok);}
+  .seal .seal-main{font-size:30px;font-weight:700;letter-spacing:.1em;}
+  .seal .seal-sub{font-size:12px;margin-top:4px;letter-spacing:.2em;}
+
+  .score-line{font-size:15px;color:var(--ink-soft);margin:6px 0 26px;}
+  .score-line b{color:var(--navy);font-size:20px;}
+
+  .restart-btn{
+    background:var(--gold); color:#2A2109; border:none; border-radius:10px;
+    padding:13px 26px; font-size:14.5px; font-weight:700; cursor:pointer;
+    font-family:inherit;
+  }
+  .restart-btn:hover{filter:brightness(0.95);}
+  .home-btn{
+    background:none;border:none;color:var(--ink-soft);
+    font-size:13.5px;cursor:pointer;margin-top:14px;font-family:inherit;
+    text-decoration:underline;
+  }
+
+  /* video corner */
+  .video-item{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-bottom:16px;
+  }
+  .video-item h3{
+    font-family:"Zen Old Mincho", serif;margin:0 0 10px;font-size:16px;color:var(--navy);
+    display:flex;align-items:center;gap:8px;
+  }
+  .video-item .num-badge{
+    width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--gold-soft);
+    font-size:12px;display:inline-flex;align-items:center;justify-content:center;font-family:"Zen Kaku Gothic New",sans-serif;
+  }
+  video{width:100%;border-radius:10px;background:#000;display:block;}
+  .video-missing{
+    padding:26px;text-align:center;color:var(--ink-soft);font-size:13.5px;
+    background:#F4F2EC;border-radius:10px;
+  }
+  .pick-btn{
+    display:block; margin-top:10px; text-align:center;
+    background:var(--navy); color:#fff; border-radius:10px;
+    padding:12px; font-size:13.5px; font-weight:700; cursor:pointer;
+  }
+  .pick-btn:hover{background:var(--navy-deep);}
+  .pick-btn input{display:none;}
+
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <p class="eyebrow">Business Manager Certification</p>
+    <h1>ビジネスマネジャー検定<br>対策サイト</h1>
+    <p class="sub">チャレンジ問題100問と講義動画で、すきま時間に管理職の必須知識を確認</p>
+  </header>
+
+  <!-- HOME -->
+  <div id="screen-home" class="section">
+    <div class="card-deck">
+      <div class="choice-card" onclick="goQuiz()">
+        <div class="icon">Q</div>
+        <h3>チャレンジ問題</h3>
+        <p>4択・○×形式で100問。ランダム出題、その場で解説つき。</p>
+      </div>
+      <div class="choice-card" onclick="goVideo()">
+        <div class="icon">▶</div>
+        <h3>動画コーナー</h3>
+        <p>講義動画①〜③を、スマホでもPCでも視聴できます。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="screen-quiz" class="section hidden">
+    <button class="back-link" onclick="goHome()">← トップに戻る</button>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label"><span id="progressLabel">1 / 10</span><span id="progressScore">正答 0</span></div>
+    </div>
+    <div class="qcard">
+      <span class="qtype-tag" id="qTypeTag">4択</span>
+      <p class="qtext" id="qText"></p>
+      <div id="mcChoices" class="choices-list"></div>
+      <div id="tfChoices" class="tf-row hidden"></div>
+      <div class="feedback" id="feedback">
+        <div class="fb-head" id="fbHead"></div>
+        <div id="fbBody"></div>
+      </div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">次の問題へ</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result" class="section hidden">
+    <div class="qcard result-wrap">
+      <div class="seal" id="resultSeal">
+        <div class="seal-main" id="sealMain">合格</div>
+        <div class="seal-sub">CHALLENGE</div>
+      </div>
+      <div class="score-line"><b id="scoreRate">0点</b>　/ 100点満点　（<span id="scoreFraction">0/10</span>問正解）</div>
+      <button class="restart-btn" onclick="goQuiz()">もう一度挑戦する</button><br>
+      <button class="home-btn" onclick="goHome()">トップに戻る</button>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div id="screen-video" class="section hidden">
+    <button class="back-link" onclick="goHome()">← トップに戻る</button>
+    <div class="video-item">
+      <h3><span class="num-badge">1</span>試験対策講義①（検定概要／マネジャー自身のマネジメント／コミュニケーション／部下のマネジメント／上司・外部とのコミュニケーション）</h3>
+      <video id="video1" controls preload="none"></video>
+      <label class="pick-btn">
+        <input type="file" accept="video/*" onchange="loadLocalVideo(event,'video1')">
+        動画ファイルを選ぶ（講習①）
+      </label>
+    </div>
+    <div class="video-item">
+      <h3><span class="num-badge">2</span>試験対策講義②（人材育成とチームマネジメント／経営計画・事業計画の策定／成果の検証・問題発見・解決）</h3>
+      <video id="video2" controls preload="none"></video>
+      <label class="pick-btn">
+        <input type="file" accept="video/*" onchange="loadLocalVideo(event,'video2')">
+        動画ファイルを選ぶ（講習②）
+      </label>
+    </div>
+    <div class="video-item">
+      <h3><span class="num-badge">3</span>試験対策講義③（経営にかかわる基礎知識／リスクマネジメント／職場環境／おさらい）</h3>
+      <video id="video3" controls preload="none"></video>
+      <label class="pick-btn">
+        <input type="file" accept="video/*" onchange="loadLocalVideo(event,'video3')">
+        動画ファイルを選ぶ（講習③）
+      </label>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "type": "mc", "question": "ジョハリの窓において、自己開発につなげる考え方として最も適切なものを選びなさい。", "choices": ["秘密の窓を狭める", "開放の窓を広げ、未知の窓を狭める", "盲点の窓を広げる", "未知の窓を広げる"], "correct": 1, "explanation": "ジョハリの窓は「開放の窓」を広げ、「未知の窓」を狭めることが自己開発につながるという考え方。「秘密の窓」を誰に開くか、「盲点の窓」にどう気づくかも重要な視点。"}, {"id": 2, "type": "mc", "question": "時間管理マトリクスにおいて、後回しにせず計画的に取り組むべき領域はどれか。", "choices": ["優先順位が高くすぐ取り掛かる領域", "緊急度は低いが重要な領域", "誰かに任せるべき領域", "優先順位が低く最後にやる領域"], "correct": 1, "explanation": "「緊急度は低いが重要なもの（第2領域）」を後回しにせずリソースを割けるかが生産性向上の鍵。①は第1領域、③は第3領域、④は第4領域。"}, {"id": 3, "type": "tf", "question": "「重要ではないが緊急度が高い仕事」は、マネジャー自身が優先して取り組むべきである。", "correct": false, "explanation": "そうした仕事（第3領域）は本来「他者に任せる」べきであり、マネジャー自身が優先すべきは第2領域の仕事。"}, {"id": 4, "type": "mc", "question": "メラビアンの実験によれば、第一印象で最も大きな割合を占める情報は次のうちどれか。", "choices": ["言語情報（話の内容）", "聴覚情報（声のトーンや速さ）", "視覚情報（表情や身だしなみ）", "パーソナルスペース"], "correct": 2, "explanation": "視覚情報55％、聴覚情報38％、言語情報7％。見た目・表情・目線・頷きなどの視覚情報が最も影響が大きい。"}, {"id": 5, "type": "mc", "question": "ノンバーバルコミュニケーションのうち、髪型・服装・持ち物などの見た目を表す分類はどれか。", "choices": ["パラランゲージ", "ボディランゲージ", "セルフ・プレゼンテーション", "パーソナル・スペース"], "correct": 2, "explanation": "セルフ・プレゼンテーション。パラランゲージは声のトーンや速さ、ボディランゲージは身振り手振り、パーソナルスペースは相手との物理的な距離感。"}, {"id": 6, "type": "mc", "question": "EQ理論（感情の知能指数）における４つのプロセスのうち、「自分の感情を認識すること」に該当するものを選びなさい。", "choices": ["識別", "利用", "理解", "調整"], "correct": 0, "explanation": "識別（自分の感情の認識）→利用（感情の活用）→理解（感情の変化の推察）→調整（適切な制御）の順で構成される。"}, {"id": 7, "type": "mc", "question": "エゴグラムにおいて、正義感・責任感の強いタイプを表す分類はどれか。", "choices": ["NP（Nurturing Parent）", "A（Adult）", "CP（Controlling Parent）", "FC（Free Child）"], "correct": 2, "explanation": "CP＝正義感・責任感、NP＝優しさ・寛容性、A＝論理性・現実志向、FC＝直感力・創造性、AC＝協調性・忍耐力（Adapted Child）。"}, {"id": 8, "type": "tf", "question": "エゴグラムにおいて、協調性が高く受け身的で、周囲の期待に応えようと努力するタイプはAC（Adapted Child）である。", "correct": true, "explanation": "ACは協調性・忍耐力のあるタイプで、自分を抑制する傾向がある点に留意が必要。"}, {"id": 9, "type": "mc", "question": "ソーシャルスタイル理論において、自己主張が強く、完璧主義でチームワークを重視するタイプはどれか。", "choices": ["ドライビング（支配型）", "エクスプレッシブ（促進型）", "アナリティカル（分析型）", "エミアブル（友好型）"], "correct": 1, "explanation": "ドライビングは自己主張が強く感情表現は小さく目標重視、アナリティカルとエミアブルは自己主張が弱いタイプ。エクスプレッシブはムードメーカーで社交的なタイプ。"}, {"id": 10, "type": "mc", "question": "PM理論を提唱した人物は誰か。", "choices": ["ハーズバーグ", "マズロー", "三隅二不二", "マクレガー"], "correct": 2, "explanation": "社会心理学者・三隅二不二が提唱。P（目標達成機能）とM（集団維持機能）が相互に補完し合うことでチーム全体のパフォーマンスが向上する。"}, {"id": 11, "type": "tf", "question": "SL理論（状況対応型リーダーシップ）は、部下の発達度に関わらず常に同じリーダーシップスタイルを用いるべきという考え方である。", "correct": false, "explanation": "SL理論は、部下（フォロワー）の発達度等に応じてリーダーシップのスタイルを柔軟に変えていくという考え方。"}, {"id": 12, "type": "mc", "question": "マズローの欲求段階説において、「欠乏欲求」に含まれないものはどれか。", "choices": ["生理的欲求", "安全の欲求", "承認の欲求", "自己実現欲求"], "correct": 3, "explanation": "生理的欲求・安全の欲求・社会的欲求・承認の欲求は「欠乏欲求」、自己実現欲求のみ「存在欲求（成長欲求）」に分類される。"}, {"id": 13, "type": "mc", "question": "ハーズバーグの2要因理論において、「衛生要因」に該当するものを選びなさい。", "choices": ["仕事の責任や達成感", "昇進", "職場環境・人間関係", "職務拡大"], "correct": 2, "explanation": "衛生要因（給与・労働条件・職場環境・人間関係・福利厚生）は満たされないと不満足だが、満たされても不満足の予防にしかならない。①②④は動機付け要因。"}, {"id": 14, "type": "tf", "question": "ハーズバーグの2要因理論における動機付け要因は、満たされなくても不満にはならないが、満たされるとやる気を高める。", "correct": true, "explanation": "その通り。動機付け要因（仕事の内容・責任・達成感・昇進など）はモチベーションアップに寄与する要因。"}, {"id": 15, "type": "mc", "question": "X理論・Y理論における「ピグマリオン効果」の説明として最も適切なものを選びなさい。", "choices": ["強制や命令がないと動かない", "部下が期待に応えようとする", "アメとムチで管理する", "人間は生まれつき仕事が嫌いだと考える"], "correct": 1, "explanation": "ピグマリオン効果は、部下が期待に応えようとする効果（Y理論的な考え方）。逆に強制や命令がないと動かないのは「ゴーレム効果」。"}, {"id": 16, "type": "mc", "question": "自己決定理論における3つの心理的欲求のうち、「自ら主体的に行動していると感じられる状態」を表すものはどれか。", "choices": ["自律性", "有能さ", "関係性", "一貫性"], "correct": 0, "explanation": "自律性。有能さは自分に能力があり優れていると感じられる状態、関係性は周囲との信頼関係を実感できる状態。"}, {"id": 17, "type": "tf", "question": "内発的動機付けに基づく行動に対して賞罰などの外発的動機付けを行うと、かえってモチベーションが低下する効果を「エンハンシング効果」という。", "correct": false, "explanation": "それは「アンダーマイニング効果」。逆に褒めたり期待したりすることで内発的動機付けが高まる効果がエンハンシング効果。"}, {"id": 18, "type": "mc", "question": "説得される側が説得する側を信用していないときに、内容とは反対の意見を抱いてしまう現象を何というか。", "choices": ["スリーパー効果", "ブーメラン効果", "返報性の原理", "単純接触効果"], "correct": 1, "explanation": "ブーメラン効果。スリーパー効果は時間の経過とともに情報源の信頼性の低さが薄れる現象、返報性の原理は利益や厚意を受けるとお返ししたくなる心理、単純接触効果は接触回数が増すほど好感度も増す効果。"}, {"id": 19, "type": "mc", "question": "行動経済学の理論のうち、「利益よりも損失を強く感じ、損失回避を優先する傾向」を表すものはどれか。", "choices": ["アンカリング効果", "プロスペクト理論", "サンクコスト", "メンタルアカウンティング"], "correct": 1, "explanation": "プロスペクト理論。①は最初に提示された情報が判断に影響する効果、③は既に払って回収できないコストにこだわる心理、④は無意識に金銭的価値を分類して判断する心理。"}, {"id": 20, "type": "tf", "question": "「現状維持バイアス」とは、目の前のことを優先してしまう心理的傾向のことである。", "correct": false, "explanation": "現状維持バイアスは「現状維持＝安定」を優先する心理。目の前を優先するのは「現在志向バイアス」。"}, {"id": 21, "type": "mc", "question": "職場内で実務を通して学ぶ教育訓練を何というか。", "choices": ["Off-JT", "OJT", "コンピテンシー", "MECE"], "correct": 1, "explanation": "OJT（On the Job Training）。Off-JTは職場外や実務以外での教育訓練。"}, {"id": 22, "type": "mc", "question": "集団で仕事をすると1人当たりの作業量が低下する現象を何というか。", "choices": ["心理的安全性", "コンピテンシー", "リンゲルマン効果", "MECE"], "correct": 2, "explanation": "リンゲルマン効果（社会的手抜きとも呼ばれる）。心理的安全性は職場等に恐れを抱くことなく話せる状態、MECEは重複や漏れがないこと。"}, {"id": 23, "type": "mc", "question": "組織の7Sのうち、「ハード」の3要素に含まれないものを選びなさい。", "choices": ["Strategy（戦略）", "Structure（組織構造）", "System（システム）", "Style（組織文化）"], "correct": 3, "explanation": "ハードの3S（Strategy・Structure・System）に対し、Style・Staff・Skill・Shared Valueはソフトの4S。"}, {"id": 24, "type": "mc", "question": "バーナード組織論において、組織が有効に成立するための3要素に含まれないものを選びなさい。", "choices": ["共通目的", "協働意欲（貢献意欲）", "コミュニケーション", "心理的安全性"], "correct": 3, "explanation": "バーナード組織論の3要素は「共通目的」「協働意欲」「コミュニケーション」。コミュニケーションが成立すると共通目的の理解が深まり貢献意欲も高まる。"}, {"id": 25, "type": "mc", "question": "独立した組織に分割し、責任が明確でマネジャーが育ちやすい組織構造はどれか。", "choices": ["機能別組織", "事業部制組織", "プロジェクトチーム型組織", "マトリクス組織"], "correct": 1, "explanation": "事業部制組織。機能別組織は役割分担で専門性を高める組織、プロジェクトチーム型組織は特定の仕事のために一時的に組織される形態。"}, {"id": 26, "type": "mc", "question": "1個あたり200円の変動費がかかる商品を300円で販売し、月の固定費が10万円の場合、損益分岐点販売数量は何個か。", "choices": ["500個", "1,000個", "2,000個", "3,000個"], "correct": 1, "explanation": "限界利益＝300円－200円＝100円。固定費10万円÷限界利益100円＝1,000個。"}, {"id": 27, "type": "tf", "question": "損益分岐点比率は、値が高いほど売上高減少による影響が少なく良好な状態であることを示す。", "correct": false, "explanation": "損益分岐点比率は低いほど良好（100％を超えると赤字）。安全余裕率は逆に高いほど良好。"}, {"id": 28, "type": "tf", "question": "バックキャスティングとは、過去の実績やデータを起点に、現在・未来へと計画を組み立てる考え方である。", "correct": false, "explanation": "それはフォアキャスティング。バックキャスティングは「目指す未来の姿」を起点に、現在とのギャップを埋めていく考え方。"}, {"id": 29, "type": "mc", "question": "3C分析における「Company」の分析対象として最も適切なものはどれか。", "choices": ["顧客のニーズや市場規模", "競合他社への脅威度", "経営資源やブランドなど自社の強み弱み", "政治・経済などのマクロ環境"], "correct": 2, "explanation": "Company（自社）。Customerは市場・顧客、Competitorは競合の分析対象。"}, {"id": 30, "type": "mc", "question": "SWOT分析における「機会（Opportunities）」の説明として最も適切なものを選びなさい。", "choices": ["組織の有利な内的特質", "組織の不利な内的特質", "外部的に有利な状況", "外部的に不利な状況"], "correct": 2, "explanation": "強み・弱みは内的要因、機会・脅威は外的要因。機会は社会環境や競合など外部的に有利な状況を指す。"}, {"id": 31, "type": "mc", "question": "ファイブフォース分析において、「原材料などの供給者不足により条件に従わざるを得なくなる」ことを表すものはどれか。", "choices": ["新規参入の脅威", "売り手の交渉力", "買い手の交渉力", "代替製品の脅威"], "correct": 1, "explanation": "売り手の交渉力。買い手の交渉力は購入者次第で供給者間の競争が激化すること。"}, {"id": 32, "type": "mc", "question": "PEST分析の「P」が表すものはどれか。", "choices": ["Product", "Politics", "Price", "Place"], "correct": 1, "explanation": "PEST分析はPolitics（政治）・Economy（経済）・Society（社会）・Technology（技術）の頭文字。"}, {"id": 33, "type": "mc", "question": "PPM（プロダクト・ポートフォリオ・マネジメント）において、市場成長が見込めずコスト削減や撤退を検討すべき象限はどれか。", "choices": ["花形（Star）", "問題児（Question Mark）", "金のなる木（Cash Cow）", "負け犬（Dog）"], "correct": 3, "explanation": "負け犬。金のなる木は市場成長が見込めない点は同じだが、既に得ている資金を花形・問題児に投資する原資として活用する点で異なる。"}, {"id": 34, "type": "mc", "question": "VRIO分析の4つの視点に含まれないものを選びなさい。", "choices": ["経済的価値（Value）", "希少性（Rarity）", "模倣困難性（Imitability）", "収益性（Revenue）"], "correct": 3, "explanation": "VRIOはValue（経済的価値）・Rarity（希少性）・Imitability（模倣困難性）・Organization（組織）の4視点。"}, {"id": 35, "type": "mc", "question": "アンゾフの成長マトリクスにおいて、既存製品を従来の顧客とは異なる顧客に展開する戦略はどれか。", "choices": ["市場浸透", "製品開発", "市場開拓", "多角化"], "correct": 2, "explanation": "市場開拓。市場浸透は既存製品を既存市場でより広く浸透させる戦略、製品開発は既存顧客に新製品を売り込む戦略、多角化は新製品と新市場参入の両方。"}, {"id": 36, "type": "mc", "question": "コトラーの競争地位戦略において、市場シェアも独自性も強みもない位置から、リーダー等に追随して効率的に生産し利益を確保する戦略をとる立場はどれか。", "choices": ["リーダー", "チャレンジャー", "フォロワー", "ニッチャー"], "correct": 2, "explanation": "フォロワー。リーダーは全方位化・フルライン戦略、チャレンジャーは差別化戦略、ニッチャーは隙間市場で独自の強みを活かす。"}, {"id": 37, "type": "mc", "question": "ABC分析（パレート分析）において、累積売上構成比が70％以下の製品群の管理方法として最も適切なものはどれか。", "choices": ["定量発注法", "重点管理の定期発注法", "2ビン法", "管理費節約のみ"], "correct": 1, "explanation": "累積70％以下＝A群は重点管理の定期発注法、70〜90％のB群は定量発注法、90％以上のC群は管理費節約となる2ビン法などで管理する。"}, {"id": 38, "type": "mc", "question": "自己資本利益率（ROE）の計算式として正しいものはどれか。", "choices": ["売上高÷総資本", "当期純利益÷自己資本×100", "純資産÷総資本×100", "固定資産÷純資産×100"], "correct": 1, "explanation": "ROE＝当期純利益÷自己資本×100。①は総資本回転率、③は自己資本比率、④は固定比率の計算式。"}, {"id": 39, "type": "tf", "question": "固定長期適合率は、値が高いほど財務的に良好な状態を示す指標である。", "correct": false, "explanation": "固定長期適合率＝固定資産÷（自己資本＋固定負債）×100で、値が低いほど良好（長期資金で固定資産をまかなえている度合いが高い）。"}, {"id": 40, "type": "mc", "question": "ある一定期間における企業の経営成績を表し、「P／L」と呼ばれる財務諸表はどれか。", "choices": ["貸借対照表", "損益計算書", "キャッシュフロー計算書", "株主資本等変動計算書"], "correct": 1, "explanation": "損益計算書（P/L）。貸借対照表（B/S）はある一時点の財政状態、キャッシュフロー計算書（C/F）は一定期間の資金の流れを表す。"}, {"id": 41, "type": "mc", "question": "問題発見の考え方に関する用語のうち、「重要目標達成指標」を表すものはどれか。", "choices": ["KPI", "4M", "KGI", "三現主義"], "correct": 2, "explanation": "KGI（Key Goal Indicators）。KPIはKGI達成のためのプロセスごとの数値化指標（Key Performance Indicators）。"}, {"id": 42, "type": "mc", "question": "三現主義において、マネジャーが問題発生時に確認すべき3要素の組み合わせとして正しいものはどれか。", "choices": ["現場・現物・現実", "現場・現物・事実", "現場・現状・現実", "現状・現物・現実"], "correct": 0, "explanation": "三現主義は「現場」「現物」「現実」の3つ。マネジャー自身が現場に赴き現物を手に取るなどして現実を確認することを指す。似た漢字の組み合わせに惑わされないよう注意。"}, {"id": 43, "type": "mc", "question": "マーケティング・ミックス（4P）のうち、広告や人的販売、イベントなどを指すものはどれか。", "choices": ["Product", "Price", "Place", "Promotion"], "correct": 3, "explanation": "Promotion（販売戦略）。Productは製品そのもの、Priceは価格、Placeは流通経路。"}, {"id": 44, "type": "mc", "question": "イノベーター理論において、新製品を積極的に吸収し価値観が社会と調和しているタイプを何というか。", "choices": ["イノベーター", "アーリーアダプター", "アーリーマジョリティ", "レイトマジョリティ"], "correct": 1, "explanation": "アーリーアダプター（初期採用者、13.5％）。イノベーターは新製品への好奇心が旺盛なタイプ（2.5％）。"}, {"id": 45, "type": "tf", "question": "イノベーター理論において、普及率のボーダーを超えるまでの困難さを「キャズム」という。", "correct": true, "explanation": "その通り。特にアーリーアダプターとアーリーマジョリティの間にある溝が大きいとされる。"}, {"id": 46, "type": "mc", "question": "重大事態を最小限に抑え、迅速な復旧を実現するため、リスクの特定や連絡体制などを事前に定めておく計画を何というか。", "choices": ["コンプライアンス", "事業継続計画（BCP）", "組織の社会的責任（CSR）", "リスクアセスメント"], "correct": 1, "explanation": "事業継続計画（BCP）。初期対応・重要業務の継続・財務的損失の最小化がポイント。"}, {"id": 47, "type": "mc", "question": "マネジャーの危機管理における現場の指標「QCD」の組み合わせとして正しいものはどれか。", "choices": ["品質・コスト・納期", "品質・コミュニケーション・納期", "品質・コスト・デザイン", "効率・コスト・納期"], "correct": 0, "explanation": "QCD＝Quality（品質不具合）・Cost（コストオーバー）・Delivery（納期遅延）の現場指標。職場の安全やハラスメント・環境・社内不正はQCDとは別に留意すべき項目として挙げられている。"}, {"id": 48, "type": "mc", "question": "OODAループの4ステップのうち、「Orient」に該当するものはどれか。", "choices": ["客観的に把握し情報収集する", "分析して状況を理解する", "最適な行動を決定する", "決定した内容を実行する"], "correct": 1, "explanation": "Observe（観察）→Orient（状況判断・分析）→Decide（意思決定）→Act（実行）。PDCAより変化の激しい状況での迅速な判断に向く。"}, {"id": 49, "type": "tf", "question": "ハインリッヒの法則によれば、1回の重大事故の背景には29回の軽傷事故と300回のヒヤリハット（軽傷を伴わない事故）が存在する。", "correct": true, "explanation": "1：29：300の法則。こうした不安全状態の改善が重要とされる。"}, {"id": 50, "type": "mc", "question": "実際には環境への配慮を行っていないにもかかわらず、環境保護に貢献するかのような広告を行い消費者に誤認させることを何というか。", "choices": ["コンプライアンス違反", "グリーンウォッシュ", "製造物責任", "CSR"], "correct": 1, "explanation": "グリーンウォッシュ。製造物責任（PL法）は製品の欠陥により生命・身体・財産が侵害された場合の製造者の損害賠償責任。"}, {"id": 51, "type": "mc", "question": "情報セキュリティの3要素のうち、「必要に応じて権限者がアクセスできる状態」を表すものはどれか。", "choices": ["機密性", "完全性", "可用性", "信頼性"], "correct": 2, "explanation": "可用性。機密性はアクセスできる人を制限している状態、完全性は情報が正確で完全である状態。"}, {"id": 52, "type": "mc", "question": "法定外労働時間（1日8時間を超えた部分）に適用される割増率はどれか。", "choices": ["×1.0", "×1.25", "×1.35", "＋0.25"], "correct": 1, "explanation": "法定外労働は×1.25、休日労働は×1.35、深夜労働（22時〜翌5時）は＋0.25で他の割増と二重で支給される。"}, {"id": 53, "type": "tf", "question": "時間外労働の上限は、原則として月45時間・年間360時間までであり、特別条項付き36協定でも年間の上限はない。", "correct": false, "explanation": "特別条項付き36協定でも年間720時間以内、複数月平均80時間以内、単月100時間未満、月45時間超は年6回までという上限がある。"}, {"id": 54, "type": "mc", "question": "取材記者や研究開発業務など、業務の性質上、労使協定で定めた時間を労働したとみなす制度はどれか。", "choices": ["事業場外みなし労働時間制", "専門業務型裁量労働制", "企画業務型裁量労働制", "1年単位変形労働時間制"], "correct": 1, "explanation": "専門業務型裁量労働制。企画業務型裁量労働制は労使委員会が設置された事業場での企画・立案業務が対象。"}, {"id": 55, "type": "mc", "question": "有給休暇について、正しい記述はどれか。", "choices": ["雇入れから3か月継続勤務で10日付与される", "年5日以上の取得をさせる義務がある", "出勤率にかかわらず10日付与される", "取得義務はなく企業判断に委ねられる"], "correct": 1, "explanation": "雇入れから6か月継続勤務かつ8割以上出勤で10日付与、年5日以上取得させる義務がある（時季指定・自己取得・計画年休）。"}, {"id": 56, "type": "mc", "question": "職場における労働者の意に反する性的な言動により、職務遂行に支障が生じ職場環境が損なわれるハラスメントを何というか。", "choices": ["対価型セクハラ", "環境型セクハラ", "パワーハラスメント", "モラルハラスメント"], "correct": 1, "explanation": "環境型セクハラ。対価型セクハラは性的欲求への対応の可否で労働条件に不利益を与えるもの。"}, {"id": 57, "type": "tf", "question": "ストレスチェック制度は、全ての事業所に対して3年に1回の実施が義務付けられている。", "correct": false, "explanation": "従業員50人以上の事業所に対し、1年以内に1回の実施が義務付けられている。また監督的地位者は事務に従事できず、医師等は本人同意なしに結果を事業者に提供できない。"}, {"id": 58, "type": "mc", "question": "問題を構成要素に分解し、原因や解決策を論理的に整理する思考ツールを何というか。", "choices": ["バランストスコアカード", "ロジックツリー", "PPM", "ファイブフォース分析"], "correct": 1, "explanation": "ロジックツリー。大きな問題を樹形図状に分解し、モレなくダブりなく（MECEに）整理することで原因分析や解決策の検討に役立てる。"}, {"id": 59, "type": "mc", "question": "バランストスコアカード（BSC）の4つの視点に含まれないものはどれか。", "choices": ["財務の視点", "顧客の視点", "業務プロセスの視点", "競合の視点"], "correct": 3, "explanation": "BSCは「財務」「顧客」「業務プロセス」「学習と成長」の4つの視点で経営を多面的に評価する手法。競合の視点という区分はない。"}, {"id": 60, "type": "mc", "question": "ドラッカーが提唱した、従業員自らが目標を設定し、その達成度で評価する制度を何というか。", "choices": ["MBO（目標管理制度）", "360度評価", "OJT", "コンピテンシー評価"], "correct": 0, "explanation": "MBO（Management by Objectives）。自ら目標設定に関与することで主体性とモチベーションを高める狙いがある。"}, {"id": 61, "type": "tf", "question": "360度評価とは、上司のみが部下を多角的な項目で評価する制度のことである。", "correct": false, "explanation": "360度評価は、上司・部下・同僚など複数の立場から評価を受ける制度。上司からの一方向の評価ではない点がポイント。"}, {"id": 62, "type": "mc", "question": "個人情報保護法における「要配慮個人情報」に該当するものとして最も適切なものはどれか。", "choices": ["生年月日", "病歴", "勤務先の部署名", "居住する市区町村名"], "correct": 1, "explanation": "要配慮個人情報とは、人種・信条・病歴・犯罪歴など、本人に対する不当な差別や偏見が生じないよう特に配慮を要する情報のこと。取得には原則として本人の同意が必要で、単なる氏名・住所・生年月日などの個人情報より厳格な扱いが求められる。"}, {"id": 63, "type": "mc", "question": "2026年1月の施行により、従来の「下請法（下請代金支払遅延等防止法）」から名称が変更された法律はどれか。", "choices": ["独占禁止法", "中小受託取引適正化法（通称：取適法）", "労働基準法", "製造物責任法"], "correct": 1, "explanation": "2026年1月1日施行の改正により、下請法は「中小受託取引適正化法（取適法）」に名称変更された。あわせて「親事業者」は「委託事業者」、「下請事業者」は「中小受託事業者」に呼称も変更されている。委託事業者による不当な代金減額・支払遅延・買いたたきなどを規制する趣旨は従来と同様。"}, {"id": 64, "type": "tf", "question": "独占禁止法は、事業者間の公正かつ自由な競争を促進するための法律であり、カルテルや不当な取引制限を禁止している。", "correct": true, "explanation": "その通り。私的独占・不当な取引制限（カルテル）・不公正な取引方法などを禁止し、市場の公正な競争を確保する法律。"}, {"id": 65, "type": "mc", "question": "知的財産権のうち、発明を一定期間保護する権利はどれか。", "choices": ["著作権", "商標権", "特許権", "意匠権"], "correct": 2, "explanation": "特許権。商標権はブランド名やロゴ、意匠権はデザイン、著作権は創作物（文章・音楽・プログラムなど）を保護する権利。"}, {"id": 66, "type": "mc", "question": "同一企業内における正社員と非正規雇用労働者との間で、不合理な待遇差を禁止する考え方を何というか。", "choices": ["同一労働同一賃金", "最低賃金制度", "裁量労働制", "変形労働時間制"], "correct": 0, "explanation": "同一労働同一賃金。パートタイム・有期雇用労働法等に基づき、基本給や賞与、手当などについて不合理な待遇差を設けることが禁止されている。"}, {"id": 67, "type": "tf", "question": "高年齢者雇用安定法により、企業は希望者全員を65歳まで雇用確保する義務を負っており、さらに70歳までの就業確保は努力義務とされている。", "correct": true, "explanation": "65歳までの雇用確保措置（定年引上げ・継続雇用制度・定年制廃止のいずれか）は義務、70歳までの就業確保措置は努力義務。"}, {"id": 68, "type": "mc", "question": "女性の職業生活における活躍を推進するため、一定規模以上の企業に行動計画の策定・公表を義務付けている法律はどれか。", "choices": ["男女雇用機会均等法", "女性活躍推進法", "育児・介護休業法", "パートタイム・有期雇用労働法"], "correct": 1, "explanation": "女性活躍推進法。自社の女性活躍に関する状況把握・課題分析を行い、行動計画を策定・公表することなどが求められる。"}, {"id": 69, "type": "mc", "question": "経営者による独断的な経営を防ぎ、企業経営の透明性・健全性を確保する仕組みを何というか。", "choices": ["コーポレートガバナンス", "イノベーション", "リストラクチャリング", "アウトソーシング"], "correct": 0, "explanation": "コーポレートガバナンス（企業統治）。株主や取締役会などによるチェック機能を通じて、経営の透明性・健全性・適法性を確保する考え方。"}, {"id": 70, "type": "tf", "question": "SDGs（持続可能な開発目標）は、企業の経営活動には関係のない、政府や国際機関のみが取り組むべき目標である。", "correct": false, "explanation": "SDGsは17のゴールから成る国際目標であり、近年は企業経営においてもSDGs・ESGを踏まえた経営（サステナビリティ経営）が重視されている。"}, {"id": 71, "type": "mc", "question": "性別・年齢・国籍・価値観など、多様な人材の違いを認め、それぞれの力を活かす経営の考え方を何というか。", "choices": ["ダイバーシティ経営", "コンプライアンス経営", "ガバナンス経営", "アウトソーシング経営"], "correct": 0, "explanation": "ダイバーシティ経営。多様な人材がその能力を最大限発揮できる環境を整えることで、組織の創造性や競争力を高める狙いがある。"}, {"id": 72, "type": "mc", "question": "自由な発想を促し、質より量を重視して、複数人でアイデアを出し合う会議手法を何というか。", "choices": ["ブレインストーミング", "ロジックツリー", "ベンチマーキング", "シナジー効果"], "correct": 0, "explanation": "ブレインストーミング。他人の意見を批判しない、自由奔放な発想を歓迎する、質より量を求める、アイデアを結合・発展させる、という4原則がある。"}, {"id": 73, "type": "tf", "question": "ロジカルシンキングにおける「演繹法」とは、複数の個別事例から共通点を見出し、一般的な結論を導く推論方法である。", "correct": false, "explanation": "それは「帰納法」。演繹法は、一般的なルールや前提を個別の事象にあてはめて結論を導く推論方法（三段論法など）。"}, {"id": 74, "type": "mc", "question": "コンピテンシーの意味として最も適切なものはどれか。", "choices": ["OJTなど、職場内で実務を通じて行う教育訓練の手法", "評価者の主観によって生じる評価の誤り（ハロー効果など）", "高い業績を安定的に上げる人材に共通する行動特性", "生まれ持った知識や潜在的な能力そのもの"], "correct": 2, "explanation": "コンピテンシーとは、高い業績を安定的に上げる人材に共通してみられる行動特性のこと。単なる知識・スキルや生まれ持った潜在能力（アビリティ）とは区別され、実際の行動として観察できる点が特徴。①はOJTの説明、②は評価誤差（ハロー効果など）の説明。"}, {"id": 75, "type": "tf", "question": "GDP（国内総生産）は、日本国内で外国人や外国企業が生み出した付加価値も含めて算出される。", "correct": true, "explanation": "GDPは「国内」を基準とする概念であり、生産主体の国籍を問わず、その国の中で一定期間に生み出された付加価値の合計を表す。一方、自国民（居住者）を基準に集計する指標はGNI（国民総所得）などと呼ばれ、GDPとは区別される。"}, {"id": 76, "type": "mc", "question": "キャッシュフロー計算書において、株式の発行や借入金の調達・返済など「資金調達」に関する資金の動きは、どの区分に分類されるか。", "choices": ["営業活動によるキャッシュフロー", "投資活動によるキャッシュフロー", "財務活動によるキャッシュフロー", "特別活動によるキャッシュフロー"], "correct": 2, "explanation": "財務活動によるキャッシュフロー。営業活動は本業に伴う収入・支出、投資活動は固定資産や有価証券の取得・売却など、財務活動は借入・返済、株式発行、配当金の支払いなど資金調達・返済に関する活動を表す。「特別活動」という区分はキャッシュフロー計算書には存在しない。"}, {"id": 77, "type": "tf", "question": "業務災害として労災保険の給付対象となるためには、「業務遂行性」（労働者が事業主の支配下にある状態で発生したこと）と「業務起因性」（業務と傷病等との間に相当因果関係があること）の両方を満たす必要がある。", "correct": true, "explanation": "その通り。業務災害の認定には「業務遂行性」と「業務起因性」の両方が求められる。なお、通勤途中に発生した災害は「業務災害」ではなく「通勤災害」として別に扱われる点にも注意が必要。"}, {"id": 78, "type": "tf", "question": "PL法（製造物責任法）に基づいて製造業者に損害賠償を請求する場合、消費者は製品の「欠陥」に加えて、製造業者に「過失」があったことも証明しなければならない。", "correct": false, "explanation": "PL法は過失の有無を問わない「無過失責任（厳格責任）」を採用しており、消費者は製品の「欠陥」と損害との間の因果関係を証明すれば足り、製造業者の過失を立証する必要はない。これにより被害者の立証負担が軽減されている。"}, {"id": 79, "type": "tf", "question": "生成AIが学習段階で他者の著作物を利用すること自体は、著作権法上、原則として著作権者の許諾なく行うことができるが、AIが生成した文章や画像を事業活動で利用する場合、既存の著作物に類似しており、かつそれに依拠して生成されたと認められるときは著作権侵害となり得る。", "correct": true, "explanation": "著作権法30条の4により、AIの学習（情報解析）目的での著作物利用は原則として著作権者の許諾なく認められている（ただし権利者の利益を不当に害する場合は除く）。一方、生成物を実際に利用する段階では通常の著作権ルールが適用され、「類似性」（既存の著作物と似ていること）と「依拠性」（それを元に生成されたこと）の両方が認められれば著作権侵害となり得る。学習していたこと自体が依拠性を推認させる場合もあるため、業務利用時は注意が必要。"}, {"id": 80, "type": "mc", "question": "会議におけるファシリテーターの役割として最も適切なものはどれか。", "choices": ["自らの意見を主張し、議論の結論を決定する", "中立的な立場で参加者の発言を引き出し、議論を整理して合意形成を促進する", "参加者の発言時間を厳格に管理するのみで、発言内容には一切関与しない", "会議の議事録作成のみを担当する"], "correct": 1, "explanation": "ファシリテーターは中立的な立場で参加者の発言を引き出し、論点を整理しながら合意形成を促進する役割を担う。自ら意見を主張して結論を決定する立場ではなく、単なる時間管理や議事録作成の担当者とも異なる点がポイント。"}, {"id": 81, "type": "tf", "question": "ロックの目標設定理論によれば、「ベストを尽くせ」といった抽象的な目標を設定する方が、具体的で適度に困難な目標を設定するよりも高い成果につながりやすい。", "correct": false, "explanation": "目標設定理論（ロック）では、具体的で適度に困難な目標の方が、曖昧で抽象的な目標（「ベストを尽くせ」など）よりも高いパフォーマンスにつながるとされる。目標の具体性と適度な困難さがモチベーションと成果を高める鍵とされる。"}, {"id": 82, "type": "mc", "question": "人事考課において、ある特定の評価項目（学歴や前職の実績など）が優れていると、他の評価項目についても実際以上に高く評価してしまう傾向を何というか。", "choices": ["中心化傾向", "ハロー効果（後光効果）", "寛大化傾向", "対比誤差"], "correct": 1, "explanation": "ハロー効果（後光効果）。中心化傾向は評価が「普通」に偏りがちになる傾向、寛大化傾向は評価者が全体的に甘く評価してしまう傾向、対比誤差は評価者自身を基準にして比較評価してしまう傾向。人事考課ではこれらのエラーを認識した上で客観的に評価することが求められる。"}, {"id": 83, "type": "mc", "question": "PDCAサイクルの「Check」段階で行うべきこととして最も適切なものはどれか。", "choices": ["目標や計画を策定する", "計画に基づいて業務を実行する", "実行結果を計画と比較し、効果や問題点を評価・分析する", "評価結果をもとに改善策を実行する"], "correct": 2, "explanation": "Check（評価）段階では、実行結果を当初の計画と比較し、効果や問題点を評価・分析する。①はPlan（計画）、②はDo（実行）、④はAct（改善）段階の内容。"}, {"id": 84, "type": "mc", "question": "ストレス反応の分類として、一般的に用いられないものはどれか。", "choices": ["身体面", "心理面", "経済面", "行動面"], "correct": 2, "explanation": "ストレス反応は一般的に「身体的反応（頭痛・肩こり・不眠など）」「心理的反応（不安・抑うつ・イライラなど）」「行動的反応（遅刻や欠勤の増加、飲酒量の増加など）」の3つに分類される。「経済面」はストレス反応の一般的な分類には含まれない。"}, {"id": 85, "type": "mc", "question": "内閣府の「仕事と生活の調和（ワーク・ライフ・バランス）憲章」が「目指すべき社会」として掲げる3つに当てはまらないものはどれか。", "choices": ["就労による経済的自立が可能な社会", "健康で豊かな生活のための時間が確保できる社会", "多様な働き方・生き方が選択できる社会", "格差のない完全に平等な社会"], "correct": 3, "explanation": "憲章が掲げる3つの社会は「就労による経済的自立が可能な社会」「健康で豊かな生活のための時間が確保できる社会」「多様な働き方・生き方が選択できる社会」。「格差のない完全に平等な社会」という文言は憲章には含まれない。"}, {"id": 86, "type": "tf", "question": "SNSを利用した販促活動の中で、マーケティング部の従業員が第三者を誹謗中傷した場合、第三者に対して損害賠償責任を負うのは当該従業員で、企業が負うことはない。", "correct": false, "explanation": "民法715条の使用者責任により、従業員が「事業の執行について」第三者に損害を与えた場合、使用者（企業）も従業員と連帯して損害賠償責任を負う。SNSでの販促活動は会社の指揮監督下にある業務の一環であるため、企業も責任を免れない点に注意が必要。"}, {"id": 87, "type": "mc", "question": "ヒューマンエラーを防止するための対策として、最も適切なものはどれか。", "choices": ["作業手順を標準化し、指差呼称やダブルチェックを取り入れる", "忙しい時間帯はチェック工程を省略し、作業スピードを優先する", "特定の担当者だけに作業を集中させ、他の人が関与しないようにする", "作業手順はその都度、担当者の判断に任せる"], "correct": 0, "explanation": "ヒューマンエラーを防ぐには、作業手順の標準化・マニュアル化、指差呼称、ダブルチェックといった具体的な仕組みづくりが有効。チェック工程の省略、特定の担当者への属人化、その都度の判断任せは、いずれもエラーを誘発する要因となる。"}, {"id": 88, "type": "mc", "question": "景品表示法における「優良誤認表示」の説明として最も適切なものはどれか。", "choices": ["商品・サービスの価格や取引条件が、実際より著しく有利であると誤認させる表示", "商品・サービスの品質・規格・内容が、実際より著しく優れていると誤認させる表示", "景品類の最高額・総額の上限を超えて景品を提供すること", "広告に第三者の推薦を無断で利用すること"], "correct": 1, "explanation": "優良誤認表示。品質・規格などの「内容」に関する誤認表示を指す。①は「有利誤認表示」（価格・取引条件についての誤認表示）の説明。景品表示法はこの2種類の不当表示に加え、過大な景品類の提供も規制している。"}, {"id": 89, "type": "tf", "question": "自社の営業担当者が競合他社と入札談合を行っている事実を知った場合、取引関係を維持するために黙認しても法的な問題にはならない。", "correct": false, "explanation": "入札談合は独占禁止法上の「不当な取引制限」に該当する違法行為であり、課徴金や刑事罰の対象となり得る。事実を知りながら黙認・放置することはコンプライアンス上重大な問題であり、速やかに上司やコンプライアンス部門・内部通報制度を通じて報告し、是正を図るべきである。"}, {"id": 90, "type": "mc", "question": "GNI（国民総所得）の説明として最も適切なものはどれか。", "choices": ["国内で生産された付加価値の合計で、生産者の国籍を問わない", "自国民（居住者）が国内外を問わず生み出した所得の合計", "一定期間の政府支出のみを合計した指標", "企業の内部留保の合計額"], "correct": 1, "explanation": "GNI（国民総所得）は、自国民（居住者）が国内外を問わず生み出した所得の合計を表す「国民」基準の指標。①はGDP（国内総生産）の説明であり、生産の「場所」を基準とするGDPと、生産者の「国籍・居住地」を基準とするGNIとは区別される。"}, {"id": 91, "type": "mc", "question": "マグレガーのX理論・Y理論に関する説明として最も適切なものはどれか。", "choices": ["X理論は、人間は本来意欲的であり、条件次第で自ら進んで働くとする考え方である", "Y理論は、命令や統制がなければ人は働かないとする考え方である", "X理論は、命令や統制、アメとムチによる管理が有効であるとする考え方である", "Y理論は、目標管理や参加型管理にはなじまないとする考え方である"], "correct": 2, "explanation": "X理論は人間を「本来怠惰で、命令や統制がないと働かない」と捉え、命令統制型・アメとムチによる管理を志向する考え方。Y理論は逆に「本来意欲的で、条件次第で自ら進んで働く」と捉え、目標管理や参加型管理になじむとされる。①②④はX理論とY理論の内容が入れ替わっている。"}, {"id": 92, "type": "mc", "question": "目標を達成に導く力は高いが、チームとしての協調性や人間関係の維持をあまり重視しないリーダーは、PM理論においてどの類型に分類されるか。", "choices": ["PM型", "Pm型", "pM型", "pm型"], "correct": 1, "explanation": "Pm型（P機能は高いが、M機能は低いタイプ）。目標達成への働きかけは強いが、メンバー間の人間関係や集団の維持への配慮に欠ける。逆に、目標達成力は低いが人間関係の維持を重視するのはpM型、両方高い理想形はPM型、両方低いのはpm型。"}, {"id": 93, "type": "tf", "question": "人事考課における「論理誤差」とは、評価者が自分の中の論理的な思い込みに基づき、実際には確認していない評価項目についても関連性があると考え、同じような評価をつけてしまうことをいう。", "correct": true, "explanation": "その通り。論理誤差は、評価者自身の論理的な思い込み（例：判断力が高いから企画力も高いはずだ、など）によって、実際に観察・確認していない項目まで関連付けて評価してしまうエラー。特定の一項目の印象に引きずられて他の項目も高く（または低く）評価してしまうハロー効果とは、原因となる仕組みが異なる点に注意。"}, {"id": 94, "type": "tf", "question": "イノベーター理論において、アーリーマジョリティは、新しいものを率先して試すのではなく周囲の動向を確認してから比較的早い段階で採用する層であり、普及率全体の中で最も大きな割合（約34％）を占める層の一つである。", "correct": true, "explanation": "その通り。アーリーマジョリティ（前期追随者、約34％）は、慎重ながらも比較的早い段階で新しいものを採用する層。イノベーター（2.5％）、アーリーアダプター（13.5％）に続く層で、レイトマジョリティ（約34％）と並び、普及率全体の中で最も大きな割合を占める。"}, {"id": 95, "type": "mc", "question": "PPM（プロダクト・ポートフォリオ・マネジメント）における「金のなる木」に対する戦略として最も適切なものはどれか。", "choices": ["新規設備投資を積極的に行い、市場シェアのさらなる拡大を図る", "過度な追加投資は避け、得られた資金を花形や問題児に振り向ける", "速やかに撤退し、経営資源を他事業に振り分ける", "市場シェアの維持よりも、値下げによる売上拡大を最優先する"], "correct": 1, "explanation": "金のなる木は市場成長率が低く、市場シェアが高い事業。過度な追加投資は避けつつ現状のシェアを維持し、そこで得られる潤沢なキャッシュフローを花形や問題児への投資原資として活用するのが基本戦略。速やかな撤退は「負け犬」に対する戦略であり、金のなる木には当てはまらない。"}, {"id": 96, "type": "tf", "question": "IoT（Internet of Things）とは、コンピュータやスマートフォンなど情報通信機器同士のみをネットワークで接続する技術のことである。", "correct": false, "explanation": "IoTは「モノのインターネット」と訳され、工場の設備、家電、センサーなど、従来インターネットに接続されていなかった様々な「モノ」がネットワークにつながり、情報をやり取りする仕組みを指す。情報通信機器同士に限定されない点がポイント。ビジネスでは、設備の稼働状況をセンサーで収集・分析し生産性向上につなげるといった活用が典型例。"}, {"id": 97, "type": "mc", "question": "営業利益に営業外収益を加え、営業外費用を差し引くことで算出される利益はどれか。", "choices": ["売上総利益", "営業利益", "経常利益", "税引前当期純利益"], "correct": 2, "explanation": "経常利益＝営業利益＋営業外収益－営業外費用。売上総利益＝売上高－売上原価、営業利益＝売上総利益－販売費及び一般管理費、税引前当期純利益＝経常利益＋特別利益－特別損失、という段階を踏んで算出される。"}, {"id": 98, "type": "mc", "question": "工場を売却したことにより利益が生じた場合、その利益は損益計算書上どこに表示されるか。", "choices": ["売上高", "営業外収益", "特別利益", "雑収入"], "correct": 2, "explanation": "特別利益。固定資産（工場など）の売却益は、通常の営業活動や経常的な事業活動とは関連しない臨時的な利益であるため「特別利益」に区分される。営業外収益は受取利息や有価証券売却益など、本業以外だが経常的に発生する収益を指し、雑収入はその内訳の一つ。売上高は本業の販売による収益。"}, {"id": 99, "type": "mc", "question": "ストレスチェック制度において、人事考課権や人事異動権を持つ「監督的地位にある者」が従事できないものはどれか。", "choices": ["ストレスチェックの実施（調査票の配布・回収など）の事務", "高ストレス者への面接指導の受診勧奨", "職場ごとの集団分析結果の活用検討", "職場環境の改善に向けた取組の実施"], "correct": 0, "explanation": "監督的地位にある者（人事考課権や人事異動権を持つ管理監督者等）は、ストレスチェックの実施者やその実施の事務に従事することができない。これは、労働者が上司の評価を気にして正直に回答できなくなることを防ぐための規定。"}, {"id": 100, "type": "mc", "question": "コンビニエンスストアなどでみられる「ドミナント戦略」の説明として最も適切なものはどれか。", "choices": ["特定の地域に出店を集中させ、市場シェアや配送効率、認知度を高める戦略", "全国各地に均等に1店舗ずつ出店し、リスクを分散させる戦略", "競合が出店していない未開拓の地域にのみ出店する戦略", "店舗を持たずインターネット通販のみで事業を展開する戦略"], "correct": 0, "explanation": "ドミナント戦略。特定エリアに集中的に出店することで、配送・物流の効率化、地域内での知名度・シェア向上、競合の参入抑制などの効果が期待できる。一方で、自社競合（カニバリゼーション）が生じるリスクもある点には注意が必要。"}];
+
+let quizOrder = [];
+let currentIndex = 0;
+let correctCount = 0;
+let answered = false;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function showScreen(id){
+  ['screen-home','screen-quiz','screen-result','screen-video'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
+  });
+}
+
+function goHome(){ showScreen('screen-home'); }
+function goVideo(){ showScreen('screen-video'); }
+
+function goQuiz(){
+  quizOrder = shuffle(QUESTIONS).slice(0, 10);
+  currentIndex = 0;
+  correctCount = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = quizOrder[currentIndex];
+  document.getElementById('qTypeTag').textContent = q.type==='mc' ? '4択' : '○×';
+  document.getElementById('qText').textContent = q.question;
+  document.getElementById('progressLabel').textContent = (currentIndex+1) + ' / ' + quizOrder.length;
+  document.getElementById('progressScore').textContent = '正答 ' + correctCount;
+  document.getElementById('progressFill').style.width = ((currentIndex)/quizOrder.length*100) + '%';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').classList.remove('show');
+
+  const mcWrap = document.getElementById('mcChoices');
+  const tfWrap = document.getElementById('tfChoices');
+  mcWrap.innerHTML = '';
+  tfWrap.innerHTML = '';
+
+  if(q.type === 'mc'){
+    mcWrap.classList.remove('hidden');
+    tfWrap.classList.add('hidden');
+    q.choices.forEach((choice, idx)=>{
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.innerHTML = '<span class="num">'+(idx+1)+'</span><span>'+choice+'</span>';
+      btn.onclick = ()=>selectMc(idx, q);
+      mcWrap.appendChild(btn);
+    });
+  } else {
+    mcWrap.classList.add('hidden');
+    tfWrap.classList.remove('hidden');
+    const oBtn = document.createElement('button');
+    oBtn.className='tf-btn'; oBtn.textContent='〇';
+    oBtn.onclick = ()=>selectTf(true, q);
+    const xBtn = document.createElement('button');
+    xBtn.className='tf-btn'; xBtn.textContent='×';
+    xBtn.onclick = ()=>selectTf(false, q);
+    tfWrap.appendChild(oBtn); tfWrap.appendChild(xBtn);
+  }
+}
+
+function selectMc(idx, q){
+  if(answered) return;
+  answered = true;
+  const isCorrect = idx === q.correct;
+  if(isCorrect) correctCount++;
+  const buttons = document.querySelectorAll('#mcChoices .choice-btn');
+  buttons.forEach((b,i)=>{
+    b.disabled = true;
+    if(i===q.correct) b.classList.add('correct');
+    if(i===idx && idx!==q.correct) b.classList.add('wrong');
+  });
+  showFeedback(isCorrect, q.explanation);
+}
+
+function selectTf(val, q){
+  if(answered) return;
+  answered = true;
+  const isCorrect = val === q.correct;
+  if(isCorrect) correctCount++;
+  const buttons = document.querySelectorAll('#tfChoices .tf-btn');
+  buttons.forEach((b)=>{
+    b.disabled = true;
+    const isO = b.textContent === '〇';
+    if(isO === q.correct) b.classList.add('correct');
+    if(isO === val && val!==q.correct) b.classList.add('wrong');
+  });
+  showFeedback(isCorrect, q.explanation);
+}
+
+function showFeedback(isCorrect, explanation){
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fbHead').textContent = isCorrect ? '正解です' : '不正解です';
+  document.getElementById('fbBody').textContent = explanation;
+  document.getElementById('progressScore').textContent = '正答 ' + correctCount;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = (currentIndex+1 < quizOrder.length) ? '次の問題へ' : '結果を見る';
+  nextBtn.classList.add('show');
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= quizOrder.length){
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult(){
+  document.getElementById('progressFill').style.width = '100%';
+  const rate = Math.round(correctCount / quizOrder.length * 100);
+  document.getElementById('scoreRate').textContent = rate + '点';
+  document.getElementById('scoreFraction').textContent = correctCount + '/' + quizOrder.length;
+  const seal = document.getElementById('resultSeal');
+  const sealMain = document.getElementById('sealMain');
+  if(rate >= 70){
+    seal.classList.add('pass');
+    sealMain.textContent = '合格';
+  } else {
+    seal.classList.remove('pass');
+    sealMain.textContent = '再挑戦';
+  }
+  showScreen('screen-result');
+}
+
+function loadLocalVideo(event, videoId){
+  const file = event.target.files[0];
+  if(!file) return;
+  const url = URL.createObjectURL(file);
+  const video = document.getElementById(videoId);
+  video.src = url;
+  video.load();
+}
+</script>
+</body>
+</html>
