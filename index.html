@@ -226,7 +226,7 @@
   .animal-grid{
     display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;
   }
-  @media (max-width:480px){ .animal-grid{grid-template-columns:repeat(2, 1fr);} }
+  @media (max-width:480px){ .animal-btn{padding:12px 4px;font-size:12.5px;} }
   .animal-btn{
     padding:14px 6px; border-radius:10px; border:1.5px solid var(--line);
     background:#fff; font-size:14px; font-family:inherit; color:var(--ink);
@@ -375,7 +375,9 @@ const GATE_CHOICE_COUNT = 6;
 function renderGate(){
   const wrap = document.getElementById('gateChoices');
   wrap.innerHTML = '';
-  shuffle(ANIMALS).slice(0, GATE_CHOICE_COUNT).forEach(name=>{
+  const others = shuffle(ANIMALS.filter(a=>a!==GATE_ANSWER)).slice(0, GATE_CHOICE_COUNT-1);
+  const choices = shuffle([GATE_ANSWER, ...others]);
+  choices.forEach(name=>{
     const btn = document.createElement('button');
     btn.className = 'animal-btn';
     btn.textContent = name;
