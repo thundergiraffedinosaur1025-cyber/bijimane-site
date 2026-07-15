@@ -224,9 +224,9 @@
   .gate-lead{font-size:14px;color:var(--ink-soft);margin:0 0 22px;}
   .gate-lead b{color:var(--navy);}
   .animal-grid{
-    display:grid; grid-template-columns:repeat(4, 1fr); gap:10px;
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;
   }
-  @media (max-width:480px){ .animal-grid{grid-template-columns:repeat(3, 1fr);} }
+  @media (max-width:480px){ .animal-grid{grid-template-columns:repeat(2, 1fr);} }
   .animal-btn{
     padding:14px 6px; border-radius:10px; border:1.5px solid var(--line);
     background:#fff; font-size:14px; font-family:inherit; color:var(--ink);
@@ -262,7 +262,7 @@
 
   <!-- GATE -->
   <div id="screen-gate" class="section">
-    <p class="gate-lead">合言葉の動物「<b>もぐら</b>」を選んでください。</p>
+    <p class="gate-lead">入場には合言葉の動物をお選びください。</p>
     <div id="gateChoices" class="animal-grid"></div>
     <div id="gateError" class="gate-error">違います。もう一度お選びください。</div>
   </div>
@@ -370,11 +370,12 @@ function goVideo(){ showScreen('screen-video'); }
 const GATE_KEY = 'bijimane_gate_passed';
 const GATE_ANSWER = 'もぐら';
 const ANIMALS = ['もぐら','ねこ','いぬ','うさぎ','ぞう','きりん','ぱんだ','とら','らいおん','さる','くま','しか','きつね','たぬき','ひつじ','うし','うま','ぶた','りす','かめ'];
+const GATE_CHOICE_COUNT = 6;
 
 function renderGate(){
   const wrap = document.getElementById('gateChoices');
   wrap.innerHTML = '';
-  shuffle(ANIMALS).forEach(name=>{
+  shuffle(ANIMALS).slice(0, GATE_CHOICE_COUNT).forEach(name=>{
     const btn = document.createElement('button');
     btn.className = 'animal-btn';
     btn.textContent = name;
