@@ -90,19 +90,19 @@
     box-shadow:0 1px 2px rgba(20,20,30,0.03);
   }
   .choice-card:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(27,42,76,0.12); border-color:var(--gold); }
-  .choice-card .icon{
-    width:44px;height:44px;border-radius:10px;
-    display:flex;align-items:center;justify-content:center;
-    background:var(--navy); color:var(--gold-soft);
-    font-size:20px; margin-bottom:14px;
-  }
   .choice-card h3{
     font-family:"Zen Old Mincho", serif;
-    display:inline-block;
+    display:inline-flex; align-items:center; gap:10px;
     margin:0 0 12px; font-size:19px; color:#fff;
-    background:var(--navy); padding:8px 14px; border-radius:8px;
+    background:var(--navy); padding:8px 14px 8px 8px; border-radius:8px;
   }
-  .choice-card p{margin:0; font-size:13.5px; color:var(--ink-soft);}
+  .choice-card h3 .icon{
+    width:30px;height:30px;border-radius:6px; flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,0.16); color:var(--gold-soft);
+    font-size:15px;
+  }
+  .choice-card p{margin:0; font-size:15px; color:var(--ink-soft);}
 
   .section{margin-top:34px;}
   .back-link{
@@ -288,19 +288,16 @@
   <div id="screen-home" class="section hidden">
     <div class="card-deck">
       <div class="choice-card" onclick="goQuiz()">
-        <div class="icon">Q</div>
-        <h3>チャレンジ問題</h3>
+        <h3><span class="icon">Q</span>チャレンジ問題</h3>
         <p>4択・○×形式で100問。ランダム出題、その場で解説つき。</p>
       </div>
       <div class="choice-card" onclick="goVideo()">
-        <div class="icon">▶</div>
-        <h3>動画コーナー</h3>
+        <h3><span class="icon">▶</span>動画コーナー</h3>
         <p>講義動画①〜③を、スマホでもPCでも視聴できます。</p>
       </div>
     </div>
     <div id="weakCard" class="choice-card weak-card hidden" onclick="goWeakQuiz()">
-      <div class="icon">★</div>
-      <h3 id="weakTitle">苦手問題を復習</h3>
+      <h3><span class="icon">★</span><span id="weakTitleText">苦手問題を復習</span></h3>
       <p>苦手な問題だけを解き直せます。</p>
     </div>
     <a class="official-link" href="https://kentei.tokyo-cci.or.jp/bijimane/" target="_blank" rel="noopener">公式サイト（申込）へ</a>
@@ -396,7 +393,7 @@ function updateWeakCard(){
   const ids = getWeakIds();
   const card = document.getElementById('weakCard');
   card.classList.toggle('hidden', ids.length === 0);
-  document.getElementById('weakTitle').textContent = '苦手問題を復習（現在 ' + ids.length + '問）';
+  document.getElementById('weakTitleText').textContent = '苦手問題を復習（現在 ' + ids.length + '問）';
 }
 
 function shuffle(arr){
